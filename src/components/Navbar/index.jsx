@@ -1,12 +1,19 @@
 import react from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Home from "../Home";
+import Regions from "../Regions";
+import Region from "../Region";
 
 const Navbar = () => {
   const [data, setData] = useState([]);
   const [regions, setRegions] = useState([]);
+  const [region, setRegion] = useState(null);
   const [home, setHome] = useState(true);
+
+   const handleRegionClick = (region) => {
+    setRegion(region);
+  };
+
 
   useEffect(() => {
     axios
@@ -27,7 +34,25 @@ const Navbar = () => {
         if (!acc[region]) {
           acc[region] = { name: region, species: [] };
         }
-        acc[region].species.push(curr.SpeciesName);
+        acc[region].species.push({
+          name: curr.SpeciesName,
+          image: curr.SpeciesIllustrationPhoto,
+          calories: curr.Calories,
+          fatTotal: curr.FatTotal,
+          description: {
+            location: curr.Location,
+            population: curr.Population,
+            populationStatus: curr.PopulationStatus,
+            animalHealth: curr.AnimalHealth,
+            availability: curr.Availability,
+            scientificName: curr.ScientificName,
+            healthBenefits: curr.HealthBenefits,
+            physicalDescription: curr.PhysicalDescription,
+            quote: curr.Quote,
+            taste: curr.Taste,
+            speciesAliases: curr.SpeciesAliases,
+          },
+        });
 
         return acc;
       }, {})
@@ -37,7 +62,17 @@ const Navbar = () => {
           ? acc + parseInt(curr.Calories)
           : acc;
       }, 0);
-      region.averageCalories = totalCalories / region.species.length;
+      region.averageCalories = Math.round(
+        totalCalories / region.species.length
+      );
+
+      const totalFatTotal = data.reduce((acc, curr) => {
+        return curr.NOAAFisheriesRegion === region.name
+          ? acc + parseInt(curr.FatTotal)
+          : acc;
+      }, 0);
+
+      region.fatPerServing = (totalFatTotal / region.species.length).toFixed(2);
       return region;
     });
 
@@ -46,7 +81,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar">
+      {/* <nav className="navbar">
         <div>
           <div id="navbar-nav">
             <ul className="navbar-nav">
@@ -58,31 +93,19 @@ const Navbar = () => {
                   Home
                 </button>
               </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Features
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Pricing
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link disabled"
-                  href="#"
-                  tabindex="-1"
-                  aria-disabled="true"
-                >
-                  Disabled
-                </a>
-              </li>
+             
+                {regions.map((region) => (
+                      <li className="nav-item">
+                        <button onClick={() => handleRegionClick(region)}>
+                            {region.name}
+                        </button>
+                    </li>
+                ))}
             </ul>
           </div>
         </div>
-      </nav>
-      {home ? <Home regions={regions} /> : null}
+      </nav> */}
+      {home ? <Regions regions={regions} /> : null}
     </>
   );
 };
