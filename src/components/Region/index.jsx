@@ -21,7 +21,7 @@ const Region = ({ region }) => {
                 <div className="container" style={{justifyContent:"space-between"}} >
                 <h5 className="species-title">{species.name}</h5>
                 <img
-                  className="species-image"
+                  className="species-image animate__animated animate__pulse animation-pulse"
                   src={species.image.src}
                   alt={species.image.alt}
                 />

@@ -9,7 +9,6 @@ export const uniqueRegions = (data) => {
 }
 
 export const averageCalories = (data) => {
-    console.log(data)
     let total = 0;
     data.forEach((item) => {
         total += item.Calories;
