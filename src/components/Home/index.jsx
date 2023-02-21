@@ -1,25 +1,23 @@
 import react from "react";
-import { uniqueRegions } from "../../helper/helper";
-import { averageCalories } from "../../helper/helper";
+import { useState, useEffect } from "react";
 
-const Home = ({ regions }) => {
-    const averageCal = averageCalories(regions);
+const Home = ({ regions, handleRegionClick }) => {
+  //this component renders the regions
   return (
     <div>
-      {/* create cards for each region  */}
-      {regions.map((region) => (
-        <div className="card" style={{ width: "18rem" }}>
-          <div className="card-body">
-            <h5 className="card-title">{region.NOAAFisheriesRegion}</h5>
-            <h6 className="card-subtitle mb-2 text-muted">
-                Calories: {averageCal}
-            </h6>
-            <h6 className="card-subtitle mb-2 text-muted">
-                FatTotal: {region.FatTotal}
-            </h6>
-          </div>
+      {/* render bunch of placeholder cards */}
+      <div className="container">
+        <div
+          className="card region-card"
+          style={{ width: "18rem", height: "18rem" }}
+        >
+          <button>
+            <div className="card-body">
+              <h5 className="card-title">region 1</h5>
+            </div>
+          </button>
         </div>
-      ))}
+      </div>
     </div>
   );
 };
