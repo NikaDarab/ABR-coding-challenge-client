@@ -3,49 +3,51 @@ import Region from "../Region";
 import Home from "../Home";
 
 const Regions = ({ regions }) => {
-  const [region, setRegion] = useState(null);
-  const [home, setHome] = useState(true);
+  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [showHome, setShowHome] = useState(true);
 
   const handleRegionClick = (region) => {
-    setRegion(region);
-    setHome(false);
+    setSelectedRegion(region);
+    setShowHome(false);
   };
+
+  const renderCard = (region) => (
+    <div key={region.name} className="card region-card card-species">
+      <button
+        onClick={() => handleRegionClick(region)}
+        className="region-button"
+      >
+        <div className="card-body">
+          <h5 className="card-title">{region.name}</h5>
+          <div className="container info-gap">
+            <h8 className="card-subtitle">
+              Average Calories: {region.averageCalories}
+            </h8>
+            <h8 className="card-subtitle">
+              Fat Per Serving: {region.fatPerServing} g
+            </h8>
+          </div>
+        </div>
+      </button>
+    </div>
+  );
 
   return (
     <div>
-      <div className="container">
-        <div
-          className="card region-card"
-          style={{ width: "18rem", height: "18rem" }}
-        >
-          <button onClick={() => setHome(true)}>
+      <div className="container region-cards">
+        <div className="card region-card region-card-home">
+          <button onClick={() => setShowHome(true)} className="home-button">
             <div className="card-body">
               <h5 className="card-title">Home</h5>
             </div>
           </button>
         </div>
-        {regions.map((region) => (
-          <div
-            key={region.name}
-            className="card region-card"
-            style={{ width: "18rem", height: "18rem" }}
-          >
-            <button onClick={() => handleRegionClick(region)}>
-              <div className="card-body">
-                <h5 className="card-title">{region.name}</h5>
-                {/* <h6 className="card-subtitle mb-2 text-muted">
-                  Average Calories: {region.averageCalories}
-                </h6>
-                <h6 className="card-subtitle mb-2 text-muted">
-                  Fat Per Serving: {region.fatPerServing} g
-                </h6> */}
-              </div>
-            </button>
-          </div>
-        ))}
+        {regions.map(renderCard)}
       </div>
-      <div>{region && <Region region={region} />}</div>
-      <div>{home && <Home  regions={regions} handleRegionClick={handleRegionClick}/>}</div>
+      {showHome ? (
+        <Home regions={regions} handleRegionClick={handleRegionClick} />
+      ) : null}
+      {selectedRegion && !showHome ? <Region region={selectedRegion} /> : null}
     </div>
   );
 };

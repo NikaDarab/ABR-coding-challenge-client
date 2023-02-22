@@ -1,32 +1,22 @@
-import react from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Regions from "../Regions";
-import Region from "../Region";
 
 const Navbar = () => {
-  const [data, setData] = useState([]);
   const [regions, setRegions] = useState([]);
-  const [region, setRegion] = useState(null);
-  const [home, setHome] = useState(true);
 
-   const handleRegionClick = (region) => {
-    setRegion(region);
-  };
-
-
-  useEffect(() => {
+  const fetchData = () => {
     axios
       .get("http://localhost:5001/gofish?apikey=abrradiology")
       .then((response) => {
-        setData(response.data);
+        setRegions(prepareData(response.data));
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  };
 
-  useEffect(() => {
+  const prepareData = (data) => {
     const regionObjects = Object.values(
       data.reduce((acc, curr) => {
         const region = curr.NOAAFisheriesRegion;
@@ -57,18 +47,21 @@ const Navbar = () => {
         return acc;
       }, {})
     ).map((region) => {
-      const totalCalories = data.reduce((acc, curr) => {
-        return curr.NOAAFisheriesRegion === region.name
-          ? acc + parseInt(curr.Calories)
-          : acc;
-      }, 0);
+        const totalCalories = data.reduce((acc, curr) => {
+            const calories = parseInt(curr.Calories);
+            return curr.NOAAFisheriesRegion === region.name && !isNaN(calories) && isFinite(calories)
+              ? acc + calories
+              : acc;
+          }, 0);
+          
       region.averageCalories = Math.round(
         totalCalories / region.species.length
       );
 
       const totalFatTotal = data.reduce((acc, curr) => {
-        return curr.NOAAFisheriesRegion === region.name
-          ? acc + parseInt(curr.FatTotal)
+        const fatTotal = parseInt(curr.FatTotal);
+        return curr.NOAAFisheriesRegion === region.name && !isNaN(fatTotal) && isFinite(fatTotal)
+          ? acc + fatTotal
           : acc;
       }, 0);
 
@@ -76,38 +69,14 @@ const Navbar = () => {
       return region;
     });
 
-    setRegions(regionObjects);
-  }, [data]);
+    return regionObjects;
+  };
 
-  return (
-    <>
-      {/* <nav className="navbar">
-        <div>
-          <div id="navbar-nav">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <button
-                  className="nav-link active"
-                  onClick={() => setHome(true)}
-                >
-                  Home
-                </button>
-              </li>
-             
-                {regions.map((region) => (
-                      <li className="nav-item">
-                        <button onClick={() => handleRegionClick(region)}>
-                            {region.name}
-                        </button>
-                    </li>
-                ))}
-            </ul>
-          </div>
-        </div>
-      </nav> */}
-      {home ? <Regions regions={regions} /> : null}
-    </>
-  );
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return <>{regions ? <Regions regions={regions} /> : null}</>;
 };
 
 export default Navbar;

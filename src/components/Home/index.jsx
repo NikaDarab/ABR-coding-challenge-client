@@ -1,23 +1,16 @@
-import react from "react";
-import { useState, useEffect } from "react";
-
-const Home = ({ regions, handleRegionClick }) => {
-  //this component renders the regions
+const Home = () => {
   return (
     <div>
-      {/* render bunch of placeholder cards */}
-      <div className="container">
-        <div
-          className="card region-card"
-          style={{ width: "18rem", height: "18rem" }}
-        >
-          <button>
-            <div className="card-body">
-              <h5 className="card-title">region 1</h5>
-            </div>
-          </button>
-        </div>
-      </div>
+      <p className="home_text">
+        Welcome to our app! The American Board of Radiology is considering
+        building a new headquarters, and we want to ensure that it's located in
+        an area where fresh, healthy fish are readily available. With our app,
+        you can easily explore different regions and discover the average
+        calorie and fat content of the fish caught there. By using this
+        information, you can help us determine the best location for our new
+        headquarters. So, let's get started and find the perfect spot for the
+        American Board of Radiology's new home!
+      </p>
     </div>
   );
 };
