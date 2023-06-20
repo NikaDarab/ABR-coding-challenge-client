@@ -1,6 +1,31 @@
 import React from "react";
 
-const Region = ({ region }) => {
+const Region = ({ region, setShoppingList }) => {
+  const addFish = (fish) => {
+    setShoppingList((prevShoppingList) => {
+      const updatedShoppingList = { ...prevShoppingList };
+      updatedShoppingList[fish.name] = updatedShoppingList[fish.name]
+        ? updatedShoppingList[fish.name] + 1
+        : 1;
+      return updatedShoppingList;
+    });
+  };
+  const removeFish = (fish) => {
+    setShoppingList((prevShoppingList) => {
+      const updatedShoppingList = { ...prevShoppingList };
+  
+      if (updatedShoppingList[fish.name]) {
+        updatedShoppingList[fish.name] -= 1;
+  
+        if (updatedShoppingList[fish.name] === 0) {
+          delete updatedShoppingList[fish.name];
+        }
+      }
+  
+      return updatedShoppingList;
+    });
+  };
+
   return (
     <div>
       <div className="card region">
@@ -51,13 +76,16 @@ const Region = ({ region }) => {
                       __html: species.description.taste,
                     }}
                   />
-
                   <p
                     className="species-description"
                     dangerouslySetInnerHTML={{
                       __html: species.description.healthBenefits,
                     }}
                   />
+                  <div className="button-container">
+                    <button onClick={() => addFish(species)}>+</button>
+                    <button onClick={() => removeFish(species)}>-</button>
+                  </div>
                 </div>
               </div>
             ))}

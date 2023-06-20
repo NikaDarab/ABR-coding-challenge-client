@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Region from "../Region";
 import Home from "../Home";
 
-const Regions = ({ regions }) => {
+const Regions = ({ regions, shoppingList, setShoppingList }) => {
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [showHome, setShowHome] = useState(true);
 
@@ -45,9 +45,19 @@ const Regions = ({ regions }) => {
         {regions.map(renderCard)}
       </div>
       {showHome ? (
-        <Home regions={regions} handleRegionClick={handleRegionClick} />
+        <Home
+          regions={regions}
+          handleRegionClick={handleRegionClick}
+          setShoppingList={setShoppingList}
+        />
       ) : null}
-      {selectedRegion && !showHome ? <Region region={selectedRegion} /> : null}
+      {selectedRegion && !showHome ? (
+        <Region
+          region={selectedRegion}
+          shoppingList={shoppingList}
+          setShoppingList={setShoppingList}
+        />
+      ) : null}
     </div>
   );
 };
