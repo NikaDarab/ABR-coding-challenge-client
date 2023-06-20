@@ -1,6 +1,6 @@
 import React from "react";
 
-const Region = ({ region, setShoppingList }) => {
+const Region = ({ region, setShoppingList, shoppingList }) => {
   const addFish = (fish) => {
     setShoppingList((prevShoppingList) => {
       const updatedShoppingList = { ...prevShoppingList };
@@ -84,6 +84,7 @@ const Region = ({ region, setShoppingList }) => {
                   />
                   <div className="button-container">
                     <button onClick={() => addFish(species)}>+</button>
+                    <div>{shoppingList[species.name]?? 0}</div>
                     <button onClick={() => removeFish(species)}>-</button>
                   </div>
                 </div>
